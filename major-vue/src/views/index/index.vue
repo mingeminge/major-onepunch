@@ -115,7 +115,13 @@
       },
       message() {
         let now = new Date(), hour = now.getHours()
-        if (hour < 7) {
+        if (hour < 3) {
+          return "睡你麻痹起来嗨啊！"
+        }
+        else if (hour < 5) {
+          return "哟！修仙呢？"
+        }
+        else if (hour < 7) {
           return "今天又是充满希望的一天！"
         }
         else if (hour < 12) {
@@ -133,12 +139,7 @@
         else if (hour < 22) {
           return "来撸一把？"
         }
-        else if (hour < 3) {
-          return "睡你麻痹起来嗨啊！"
-        }
-        else {
-          return "哟！修仙呢？"
-        }
+
       },
       isReSize() {
         return this.sidebar.opened;
