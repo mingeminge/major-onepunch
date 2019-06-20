@@ -84,6 +84,7 @@ major-server（后台）:将sql文件跑到本地数据库中，即可运行
 
 作者：
 Mingege,96年的小码农
+联系方式：qq：278406977
 
 鸣谢：
 该项目参考了vue-element-admin https://panjiachen.github.io/vue-element-admin-site/zh/
