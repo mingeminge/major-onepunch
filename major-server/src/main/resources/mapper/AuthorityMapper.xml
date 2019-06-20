@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.AuthorityMapper">
+    <resultMap id="Authority_Map" type="com.yzm.majorserver.web.dataobject.AuthorityDO">
+        <id column="id" property="id"/>
+        <result column="authority_name" property="authorityName"/>
+        <result column="authority_url" property="authorityUrl"/>
+        <result column="remark" property="remark"/>
+        <result column="parent_id" property="parentId"/>
+    </resultMap>
+
+    <resultMap id="Authority_Result_Map" type="com.yzm.majorserver.web.dataobject.AuthorityDO">
+        <id column="id" property="id"/>
+        <result column="authority_name" property="authorityName"/>
+        <result column="authority_url" property="authorityUrl"/>
+        <result column="remark" property="remark"/>
+        <result column="parent_id" property="parentId"/>
+        <collection property="children" ofType="com.yzm.majorserver.web.dataobject.AuthorityDO">
+            <id column="id1" property="id"/>
+            <result column="authority_name1" property="authorityName"/>
+            <result column="authority_url1" property="authorityUrl"/>
+            <result column="remark1" property="remark"/>
+            <result column="parent_id1" property="parentId"/>
+        </collection>
+    </resultMap>
+
+    <select id="findById" resultMap="Authority_Map">
+      select id,authority_name,authority_url,remark,parent_id from tb_authority where id=#{id}
+    </select>
+    <select id="findAll" resultMap="Authority_Result_Map">
+        SELECT
+        A.id,A.authority_name,A.authority_url,A.remark , A.parent_id,
+        B.id id1,B.authority_name authority_name1,B.authority_url authority_url1,B.remark remark1,B.parent_id parent_id1
+        FROM
+        ( SELECT id,authority_name,authority_url,remark ,parent_id FROM tb_authority WHERE parent_id = 0 ) A
+        LEFT JOIN tb_authority B ON A.id = B.parent_id
+        <where>
+            <if test="authorityName!=null and authorityName!=''">
+                and authority_name like concat(#{authorityName},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="save">
+        insert into tb_authority (authority_name,authority_url,remark,parent_id)
+        values (#{authorityName},#{authorityUrl},#{remark},#{parentId})
+    </insert>
+
+    <update id="update">
+        update tb_authority
+        <set>
+            <if test="authorityName!=null and authorityName!=''">
+                authority_name=#{authorityName},
+            </if>
+            <if test="authorityUrl!=null and authorityUrl!=''">
+                authority_url=#{authorityUrl},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="parentId!=null">
+                parent_id=#{parentId}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from tb_authority where id=#{id}
+    </delete>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.CartoonCatMapper">
+    <resultMap id="CatMap" type="com.yzm.majorserver.web.dataobject.CartoonCat">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="order" property="order"/>
+        <result column="description" property="description"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="list" resultMap="CatMap">
+        select * from tb_cartoon_cat
+        <where>
+            <if test="name!=null and name!=''">
+               and `name` like concat(#{name},'%')
+            </if>
+        </where>
+        order by `order`
+    </select>
+
+    <insert id="save">
+        insert into tb_cartoon_cat (name,order,description,create_user,create_time,update_time)
+         values (#{name},#{order},#{description},#{createUser},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update">
+        update tb_cartoon_cat
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="order!=null">
+                order=#{order},
+            </if>
+            <if test="description!=null and description!=''">
+                description=#{description},
+            </if>
+            create_user=#{createUser},
+            create_time=#{createTime},
+            update_time=#{updateTime}
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from tb_cartoon_cat where id=#{id}
+    </delete>
+</mapper>

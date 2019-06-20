@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.VisitLogMapper">
+
+    <insert id="save" parameterType="com.yzm.majorserver.web.dataobject.VisitLogDO">
+        insert into tb_visit_log (ip,user_id,login_date,region,isp,country,city)
+        values(#{ip},#{userId},#{loginDate},#{region},#{isp},#{country},#{city})
+    </insert>
+
+    <select id="getVisitCount" resultType="java.lang.Integer">
+        select count(id) from tb_visit_log
+    </select>
+
+    <select id="getVisitToday" resultType="java.lang.Integer">
+        select count(*) from tb_visit_log where date(login_date) = curdate();
+    </select>
+
+    <select id="getLastLoginDate" resultType="java.util.Date">
+        SELECT login_date FROM tb_visit_log WHERE user_id = #{userId}  ORDER BY login_date desc
+    </select>
+
+    <select id="getLoginInfo" resultType="com.yzm.majorserver.web.dataobject.VisitLogDO">
+        select * from tb_visit_log where user_id=#{userId} ORDER BY login_date desc
+    </select>
+
+    <select id="getLoginChart" resultType="com.yzm.majorserver.web.dto.VisitChart">
+        SELECT
+        A.count visitCount,
+        IFNULL(B.count,0) userVisit,
+        DATE_FORMAT(A.login_date,'%Y-%m-%d') time
+        FROM
+        (
+        SELECT
+        COUNT( * ) count,
+        login_date
+        FROM
+        tb_visit_log
+        WHERE
+        DATE_SUB( CURDATE( ), INTERVAL 30 DAY ) &lt;= login_date
+        GROUP BY
+        DATE_FORMAT( login_date, '%Y-%m-%d' )
+        ) A
+        LEFT JOIN (
+        SELECT
+        COUNT( * ) count,
+        login_date
+        FROM
+        tb_visit_log
+        WHERE
+        DATE_SUB( CURDATE( ), INTERVAL 30 DAY ) &lt;= login_date
+        AND user_id = #{userId}
+        GROUP BY
+        DATE_FORMAT( login_date, '%Y-%m-%d' )
+        ) B ON DATE_FORMAT( A.login_date, '%Y-%m-%d' ) = DATE_FORMAT( B.login_date, '%Y-%m-%d' ) order by A.login_date asc
+    </select>
+</mapper>

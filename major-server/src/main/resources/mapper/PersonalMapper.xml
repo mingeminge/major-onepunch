@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.PersonalMapper">
+    <resultMap id="User_Map" type="com.yzm.majorserver.web.dataobject.UserDO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="sex" property="sex"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="img_url" property="imgUrl"/>
+        <result column="signature" property="signature"/>
+        <result column="create_time" property="createTime"/>
+        <result property="update_time" column="updateTime"/>
+    </resultMap>
+    <sql id="user_column">
+        id,username,password,sex ,phone,email,img_url,nick_name,signature,create_time ,update_time
+    </sql>
+    <select id="findByUsername" resultMap="User_Map" parameterType="java.lang.String">
+        select
+        <include refid="user_column"></include>
+        from tb_user where username=#{username}
+    </select>
+
+    <update id="updateInfo">
+        update tb_user
+        <set>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="email!=null and email!=''">
+                email=#{email},
+            </if>
+            <if test="nickName!=null and nickName!=''">
+                nick_name=#{nickName},
+            </if>
+            <if test="signature!=null">
+                signature=#{signature},
+            </if>
+            <if test="updateTime!=null and updateTime!=''">
+                update_time=#{updateTime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updatePassword">
+        update tb_user
+        <set>
+            <if test="password!=null and password!=''">
+                password=#{password},
+            </if>
+            <if test="updateTime!=null">
+                update_time=#{updateTime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateImg">
+        update tb_user
+        <set>
+            <if test="imgUrl!=null and imgUrl!=''">
+                img_url=#{imgUrl}
+            </if>
+        </set>
+        where id=#{userId}
+    </update>
+</mapper>

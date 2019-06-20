@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.RoleMapper">
+
+    <resultMap id="RoleMap" type="com.yzm.majorserver.web.dataobject.RoleDO">
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+        <result column="description" property="description"/>
+        <result column="available" property="available"/>
+        <collection property="authorities" ofType="com.yzm.majorserver.web.dataobject.AuthorityDO">
+            <id column="authorityId" property="id"/>
+            <result column="authority_name" property="authorityName"/>
+            <result column="authority_url" property="authorityUrl"/>
+            <result column="remark" property="remark"/>
+            <result column="parent_id" property="parentId"/>
+        </collection>
+        <collection property="menus" ofType="com.yzm.majorserver.web.dataobject.MenuDO">
+            <id column="menuId" property="id"/>
+            <result column="menuName" property="name"/>
+            <result column="menuParentId" property="parentId"/>
+            <result column="menuPath" property="path"/>
+        </collection>
+    </resultMap>
+
+    <select id="findById" resultMap="RoleMap">
+        select r.*,a.id authorityId,a.authority_name,a.authority_url,a.remark,a.parent_id ,
+        m.id menuId,m.name menuName,m.parent_id menuParentId
+        from tb_role r
+        LEFT JOIN tb_role_authority ra ON r.id=ra.role_id
+        LEFT JOIN tb_authority a on ra.authority_id=a.id
+        LEFT JOIN tb_role_menu rm ON r.id=rm.role_id
+		LEFT JOIN tb_menu m ON rm.menu_id=m.id
+        where r.id=#{id}
+    </select>
+    <select id="findAll" resultMap="RoleMap">
+        select id,role_name,description,available from tb_role
+    </select>
+
+    <insert id="addRole">
+        insert into tb_role (role_name,description,available) values (#{roleName},#{description},#{available})
+    </insert>
+
+    <delete id="delRole">
+        delete from tb_role where id=#{roleId}
+    </delete>
+
+    <update id="updateRole">
+        update tb_role set
+        <if test="roleName!=null and roleName!=''">
+            role_name=#{roleName},
+        </if>
+        <if test="description!=null and description!=''">
+            description=#{description},
+        </if>
+        <if test="available!=null">
+            available=#{available}
+        </if>
+        where id=#{id}
+    </update>
+
+    <select id="findAuthorities" resultType="java.lang.Integer">
+        SELECT a.id FROM tb_role r LEFT JOIN tb_role_authority ra on r.id=ra.role_id
+        LEFT JOIN tb_authority a ON ra.authority_id=a.id WHERE r.id=#{roleId}
+    </select>
+
+    <insert id="setRoleAuthority">
+        insert into tb_role_authority (role_id,authority_id) values
+        <foreach collection="authorityIds" item="item" separator=",">
+            (#{roleId},#{item})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRoleAuthorityByRoleId">
+        delete from tb_role_authority where authority_id in
+        <foreach collection="authorityIds" item="authorityId" open="(" close=")" separator=",">
+            #{authorityId}
+        </foreach>
+        and role_id=#{roleId}
+    </delete>
+
+    <delete id="deleteRoleAuthority">
+        delete from tb_role_authority where role_id=#{roleId}
+    </delete>
+
+    <select id="roleList" resultType="com.yzm.majorserver.web.dataobject.RoleDO">
+        select id,role_name roleName,description from tb_role where available = 1
+    </select>
+</mapper>

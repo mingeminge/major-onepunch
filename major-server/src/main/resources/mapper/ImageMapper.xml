@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.ImageMapper">
+    <resultMap id="Image_Map" type="com.yzm.majorserver.web.dataobject.ImageDO">
+        <id column="id" property="id"/>
+        <result column="img_url" property="imgUrl"/>
+        <result column="description" property="description"/>
+        <result column="type" property="type"/>
+    </resultMap>
+    <sql id="ImageColumn">
+        id,img_url,description,type
+    </sql>
+    <select id="findById" resultMap="Image_Map">
+        select
+        <include refid="ImageColumn"/>
+        from tb_image where id=#{id}
+    </select>
+    <select id="list" resultMap="Image_Map">
+        select
+        <include refid="ImageColumn"/>
+        from tb_image
+        <where>
+            <if test="type!=null">
+                type =#{type}
+            </if>
+        </where>
+    </select>
+
+    <update id="update">
+        update tb_image
+        <set>
+            <if test="imgUrl!=null and imgUrl!=''">
+                img_url=#{imgUrl},
+            </if>
+            <if test="description!=null and description!=''">
+                description=#{description},
+            </if>
+            <if test="type!=null">
+                type=#{type}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from tb_image where id=#{id}
+    </delete>
+
+    <insert id="save" parameterType="com.yzm.majorserver.web.dataobject.ImageDO">
+        insert into tb_image (img_url,description,type) values (#{imgUrl},#{description},#{type})
+    </insert>
+</mapper>

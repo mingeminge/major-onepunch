@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.SystemLogMapper">
+    <resultMap id="LogMap" type="com.yzm.majorserver.web.dataobject.SystemLogDO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="module_name" property="moduleName"/>
+        <result column="method_name" property="methodName"/>
+        <result column="request_url" property="requestUrl"/>
+        <result column="ip_address" property="ipAddress"/>
+        <result column="use_time" property="useTime"/>
+        <result column="is_error" property="isError"/>
+        <result column="error_msg" property="errorMsg"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="LogMap">
+        select id,username,module_name,method_name,request_url,ip_address,use_time,is_error,error_msg,create_time
+        from tb_system_log
+        <where>
+            <if test="username!=null and username!=''">
+                and username=#{username}
+            </if>
+            <if test="isError!=null">
+                and is_error=#{isError}
+            </if>
+            <if test="startTime!=null and endTime!=null">
+                and date_format(create_time,'%Y-%m-%d') between #{startTime} and #{endTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <delete id="deleteLog">
+        delete from tb_system_log where id=#{id}
+    </delete>
+
+    <insert id="saveLog">
+        insert into tb_system_log (username,module_name,method_name,request_url,ip_address,use_time,is_error,error_msg,create_time)
+        values (#{username},#{moduleName},#{methodName},#{requestUrl},#{ipAddress},#{useTime},#{isError},#{errorMsg},#{createTime})
+    </insert>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzm.majorserver.web.mapper.UserMapper">
+    <sql id="user_column">
+        id,username,password,sex ,phone,email,img_url imgUrl,signature, nick_name nickName,create_time createTime,update_time updateTime
+    </sql>
+    <resultMap id="User_Map" type="com.yzm.majorserver.web.dataobject.UserDO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="sex" property="sex"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="img_url" property="imgUrl"/>
+        <result column="signature" property="signature"/>
+        <result column="create_time" property="createTime"/>
+        <result property="update_time" column="updateTime"/>
+        <collection property="roles" ofType="com.yzm.majorserver.web.dataobject.RoleDO">
+            <id column="roleId" property="id"/>
+            <result column="role_name" property="roleName"/>
+            <result column="description" property="description"/>
+            <result column="available" property="available"/>
+            <collection property="authorities" ofType="com.yzm.majorserver.web.dataobject.AuthorityDO">
+                <id column="authorityId" property="id"/>
+                <result column="authority_name" property="authorityName"/>
+                <result column="authority_url" property="authorityUrl"/>
+                <result column="remark" property="remark"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findByUsername" resultMap="User_Map">
+        select
+        u.id,u.username,u.password,u.sex,u.phone,u.email,u.nick_name,u.img_url,u.signature,u.create_time, u.update_time,
+        r.id roleId,r.role_name,r.available,r.description,a.id authorityId,a.authority_name ,a.authority_url,a.remark
+        from tb_user u
+        LEFT JOIN tb_user_role ur on u.id=ur.user_id
+        LEFT JOIN tb_role r on ur.role_id=r.id
+        LEFT JOIN tb_role_authority ra on r.id =ra.role_id
+        LEFT JOIN tb_authority a on ra.authority_id= a.id
+        where u.username=#{username}  and r.available=1 and a.parent_id!=0 and a.parent_id is not null
+    </select>
+
+    <select id="findById" resultMap="User_Map" parameterType="java.lang.Integer">
+        select
+        u.id,u.username,u.password,u.sex,u.phone,u.email,u.nick_name,u.img_url,u.signature,u.create_time, u.update_time,
+        r.id roleId,r.role_name,r.description
+        from tb_user u
+        left join tb_user_role ur on u.id=ur.user_id
+        left join tb_role r on ur.role_id=r.id
+        where u.id=#{id}
+    </select>
+    <select id="findAll" resultType="com.yzm.majorserver.web.dataobject.UserDO">
+        select <include refid="user_column"></include> from tb_user
+        <where>
+            <if test="username!=null and username!=''">
+                and username like concat(#{username},'%')
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone like concat(#{phone},'%')
+            </if>
+            <if test="email!=null and email!=''">
+                and email like concat(#{email},'%')
+            </if>
+            <if test="startTime!=null and endTime!=null">
+                and date_format(create_time,'%Y-%m-%d') between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.yzm.majorserver.web.dataobject.UserDO">
+        update tb_user
+        <set>
+            <if test="username!=null and username!=''">
+                username=#{username},
+            </if>
+            <if test="password!=null and password!=''">
+                password=#{password},
+            </if>
+            <if test="phone !=null and phone != ''">
+                phone=#{phone},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="email!=null and email!=''">
+                email=#{email},
+            </if>
+            <if test="nickName!=null and nickName!=''">
+                nick_name=#{nickName},
+            </if>
+            <if test="signature!=null and signature!=''">
+                signature=#{signature},
+            </if>
+            <if test="updateTime!=null">
+                update_time=#{updateTime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from tb_user where id=#{id}
+    </delete>
+
+    <insert id="save" parameterType="com.yzm.majorserver.web.dataobject.UserDO">
+        insert into tb_user (username,password,sex,phone,email,nick_name,signature,update_time,create_time) values
+        (#{username},#{password},#{sex},#{phone},#{email},#{nickName},#{signature},#{updateTime},#{createTime})
+    </insert>
+
+    <insert id="saveUserRole">
+        insert into tb_user_role (user_id,role_id) values
+        <foreach collection="userRoles" item="item" separator=",">
+            (#{item.userId},#{item.roleId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserRole" parameterType="java.lang.Integer">
+        delete from tb_user_role where user_id=#{userId}
+    </delete>
+
+    <delete id="deleteUserRoleByRoleId">
+        delete from tb_user_role where role_id in
+        <foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+            #{roleId}
+        </foreach>
+        and user_id=#{userId}
+    </delete>
+</mapper>
