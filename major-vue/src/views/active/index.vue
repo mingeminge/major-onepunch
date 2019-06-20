@@ -52,7 +52,7 @@
           type: 'warning'
         }).then(() => {
           _this.loading = true;
-          if (token === localStorage.getItem('token')) {
+          if (token === _this.$store.getters.token) {
             _this.$confirm('自己踢自己?是个狼人!', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',

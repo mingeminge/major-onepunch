@@ -1,6 +1,5 @@
 package com.yzm.majorserver.web.service;
 
-import com.github.pagehelper.PageHelper;
 import com.yzm.majorserver.web.dataobject.CartoonCat;
 import com.yzm.majorserver.web.dataobject.CartoonContent;
 import com.yzm.majorserver.web.mapper.CartoonCatMapper;

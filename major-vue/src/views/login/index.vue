@@ -5,7 +5,7 @@
               :src="loginGif"></el-image>
     <el-image :fit="fit" :src="bgImg"></el-image>
     <div class="login-form animated flipInY" :title="'兴趣使然的Hero'">
-      <h3>一击男</h3>
+      <h3>ONE PUNCH MAN</h3>
       <h3></h3>
       <el-form ref="loginForm" status-icon :model="form" :rules="rules">
         <el-form-item prop="username" :error="errorMsg">

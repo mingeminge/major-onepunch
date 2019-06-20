@@ -36,3 +36,6 @@ logging:
     com.yzm.majorserver: info
     org.springfromework.web: info
 imgDirPath: /Users/yizuomin/major-repository/major-vue/static/images/headerImg/
+IpApi:
+  url: https://way.jd.com/Quxun/ipaddress
+  appKey:

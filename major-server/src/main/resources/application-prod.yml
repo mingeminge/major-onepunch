@@ -36,3 +36,6 @@ logging:
     com.yzm.majorserver: info
     org.springfromework.web: info
 imgDirPath: /home/soft/image/
+IpApi:
+  url: https://way.jd.com/Quxun/ipaddress
+  appKey:

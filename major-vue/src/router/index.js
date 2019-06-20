@@ -89,7 +89,7 @@ export default new Router({
         meta: {title: '头像管理', icon: 'image'}
       }]
     },
-    {
+    /*{
       path: '/cartoon',
       meta: {title: '一拳漫画', icon: 'setting'},
       component: resolve => require(['../views/layout/Layout'], resolve),
@@ -104,6 +104,16 @@ export default new Router({
         component: resolve => require(['../views/cartoon/murata/index'], resolve),
         meta: {title: '村田重制版', icon: 'image'}
       }]
+    },*/
+    {
+      path: '/GitHub',
+      component: resolve => require(['../views/layout/Layout'], resolve),
+      children: [
+        {
+          path: 'https://github.com/mingeminge/major-onepunch',
+          meta: { title: 'GitHub', icon: "github" }
+        }
+      ]
     },
     {path: '/*', component: () => import('@/views/404/404'), hidden: false}
   ]

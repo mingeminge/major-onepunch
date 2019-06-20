@@ -47,10 +47,13 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
 
     private VisitServiceImpl visitService;
 
-    public AuthFilter(AuthenticationManager authenticationManager, RedisUtil redisUtil, VisitServiceImpl visitService) {
+    private IpAddressUtil ipAddressUtil;
+
+    public AuthFilter(AuthenticationManager authenticationManager, RedisUtil redisUtil, VisitServiceImpl visitService, IpAddressUtil ipAddressUtil) {
         this.authenticationManager = authenticationManager;
         this.redisUtil = redisUtil;
         this.visitService = visitService;
+        this.ipAddressUtil = ipAddressUtil;
 
     }
 
@@ -82,7 +85,7 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
             });
         });
         try {
-            IpAddressResponse ipInfo = IpAddressUtil.getIpInfo(request.getRemoteAddr());
+            IpAddressResponse ipInfo = ipAddressUtil.getIpInfo(request.getRemoteAddr());
             if (null != ipInfo) {
                 VisitLogDO visitLogDO = new VisitLogDO();
                 BeanUtils.copyProperties(ipInfo, visitLogDO);

@@ -1,6 +1,8 @@
 package com.yzm.majorserver.core.security;
 
+import com.yzm.majorserver.common.utils.IpAddressUtil;
 import com.yzm.majorserver.common.utils.RedisUtil;
+import com.yzm.majorserver.common.vo.IpAddressResponse;
 import com.yzm.majorserver.web.service.UserServiceImpl;
 import com.yzm.majorserver.web.service.VisitServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,25 +34,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthProvider authProvider;
     private RedisUtil redisUtil;
     private VisitServiceImpl visitService;
+    private IpAddressUtil ipAddressUtil;
 
     private AuthPermissionEvaluator permissionEvaluator;
 
     @Autowired
     public SecurityConfig(AuthLogoutSuccessHandler logoutSuccessHandler, UserServiceImpl userDetailService, AuthProvider authProvider, RedisUtil redisUtil,
-                          VisitServiceImpl visitService, AuthPermissionEvaluator permissionEvaluator) {
+                          VisitServiceImpl visitService, AuthPermissionEvaluator permissionEvaluator, IpAddressUtil ipAddressUtil) {
         this.logoutSuccessHandler = logoutSuccessHandler;
         this.userDetailService = userDetailService;
         this.authProvider = authProvider;
         this.redisUtil = redisUtil;
         this.visitService = visitService;
         this.permissionEvaluator = permissionEvaluator;
+        this.ipAddressUtil = ipAddressUtil;
     }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider);
-       // auth.userDetailsService(userDetailService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userDetailService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Bean
@@ -88,6 +93,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .addFilter(new AuthTokenFilter(authenticationManager(), redisUtil))
-                .addFilterAt(new AuthFilter(authenticationManagerBean(), redisUtil, visitService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new AuthFilter(authenticationManagerBean(), redisUtil, visitService, ipAddressUtil), UsernamePasswordAuthenticationFilter.class);
     }
 }

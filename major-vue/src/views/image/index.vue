@@ -88,7 +88,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
-    <el-dialog center="true" :top="dialogTop" :width="dialogWidth" :visible.sync="imgVisible">
+    <el-dialog center :top="dialogTop" :width="dialogWidth" :visible.sync="imgVisible">
       <el-image style="width: 100%;" :src="imgSrc"></el-image>
     </el-dialog>
   </div>
