@@ -15,23 +15,37 @@
 主要用到的技术：
 
 后端：
+
 springboot 2.1.4 
+
 springsecurity
+
 redis
+
 mybatis
+
 fastjson
+
 pagehelper
 
 前端：
+
 vue 2.5.2
+
 element-ui
+
 axios
+
 vuex
+
 echarts
+
 vue-particles
+
 vue-router
 
 主要功能：
+
 1、登录：登录之后将通过京东万象买的接口查询当前登录用户的ip信息，并生成token存储到redis，最后通过json返回给前端，每次登录成功都会将路由初始化时随机加载的动画全屏播放，播放完成之后跳转到系统首页，系不系很炫酷😁！
 
 2、首页：主要展示当前登录用户的信息、登录信息及系统访问统计等；
