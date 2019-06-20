@@ -26,7 +26,7 @@ public class IpAddressUtil {
     private String appKey;
 
     public IpAddressResponse getIpInfo(String ip) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(2);
         map.put("ipaddress", ip);
         map.put("appkey", appKey);
         try {
