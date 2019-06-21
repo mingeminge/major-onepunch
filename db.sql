@@ -66,34 +66,6 @@ INSERT INTO `tb_authority` VALUES (32, '头像上传', 'sysImage:upload', NULL, 
 COMMIT;
 
 -- ----------------------------
--- Table structure for tb_cartoon_cat
--- ----------------------------
-DROP TABLE IF EXISTS `tb_cartoon_cat`;
-CREATE TABLE "tb_cartoon_cat" (
-  "id" int(11) NOT NULL AUTO_INCREMENT,
-  "name" varchar(50) DEFAULT NULL,
-  "order" int(11) DEFAULT NULL,
-  "description" varchar(255) DEFAULT NULL,
-  "create_user" varchar(50) DEFAULT NULL,
-  "create_time" datetime DEFAULT NULL,
-  "update_time" datetime DEFAULT NULL,
-  PRIMARY KEY ("id")
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for tb_cartoon_content
--- ----------------------------
-DROP TABLE IF EXISTS `tb_cartoon_content`;
-CREATE TABLE "tb_cartoon_content" (
-  "id" int(11) NOT NULL AUTO_INCREMENT,
-  "url" varchar(255) DEFAULT NULL,
-  "cat_id" int(11) DEFAULT NULL,
-  "create_time" datetime DEFAULT NULL,
-  "update_time" datetime DEFAULT NULL,
-  PRIMARY KEY ("id")
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
 -- Table structure for tb_image
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_image`;
@@ -134,28 +106,6 @@ INSERT INTO `tb_image` VALUES (30, '1560608690916.png', '11111', 1, NULL);
 INSERT INTO `tb_image` VALUES (31, '1560697302070.png', 'sadsa', 1, NULL);
 INSERT INTO `tb_image` VALUES (35, '1560781807449.png', '1321', 1, NULL);
 INSERT INTO `tb_image` VALUES (39, '1560782199696.png', '2321', 1, NULL);
-COMMIT;
-
--- ----------------------------
--- Table structure for tb_menu
--- ----------------------------
-DROP TABLE IF EXISTS `tb_menu`;
-CREATE TABLE "tb_menu" (
-  "id" int(11) NOT NULL AUTO_INCREMENT,
-  "name" varchar(50) DEFAULT NULL,
-  "path" varchar(100) DEFAULT NULL,
-  "parent_id" int(11) DEFAULT NULL,
-  PRIMARY KEY ("id")
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tb_menu
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_menu` VALUES (1, 'Layout', '/', 0);
-INSERT INTO `tb_menu` VALUES (2, '主页', '/index', 1);
-INSERT INTO `tb_menu` VALUES (3, '系统管理', '/system', 0);
-INSERT INTO `tb_menu` VALUES (4, '用户管理', '/user', 3);
 COMMIT;
 
 -- ----------------------------
@@ -239,28 +189,6 @@ INSERT INTO `tb_role_authority` VALUES (2, 29);
 INSERT INTO `tb_role_authority` VALUES (2, 32);
 COMMIT;
 
--- ----------------------------
--- Table structure for tb_role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `tb_role_menu`;
-CREATE TABLE "tb_role_menu" (
-  "role_id" int(11) NOT NULL,
-  "menu_id" int(11) NOT NULL,
-  PRIMARY KEY ("role_id","menu_id"),
-  UNIQUE KEY "UK_rcxbh4x5fr30r1yg6e9w3q5e1" ("menu_id"),
-  CONSTRAINT "FKhgyor7wk0rn9tpkco4fhj6ack" FOREIGN KEY ("menu_id") REFERENCES "tb_menu" ("id"),
-  CONSTRAINT "FKkcsw7rhe6svgmgxsd4ib4tkv9" FOREIGN KEY ("role_id") REFERENCES "tb_role" ("id")
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tb_role_menu
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_role_menu` VALUES (1, 1);
-INSERT INTO `tb_role_menu` VALUES (1, 2);
-INSERT INTO `tb_role_menu` VALUES (1, 3);
-INSERT INTO `tb_role_menu` VALUES (1, 4);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tb_system_log
@@ -279,69 +207,6 @@ CREATE TABLE "tb_system_log" (
   "create_time" datetime DEFAULT NULL,
   PRIMARY KEY ("id")
 ) ENGINE=InnoDB AUTO_INCREMENT=1017 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for tb_tread
--- ----------------------------
-DROP TABLE IF EXISTS `tb_tread`;
-CREATE TABLE "tb_tread" (
-  "id" int(11) NOT NULL AUTO_INCREMENT,
-  "img_url" varchar(100) DEFAULT NULL,
-  "price" decimal(19,2) DEFAULT NULL,
-  "tread_num" varchar(20) DEFAULT NULL,
-  PRIMARY KEY ("id"),
-  UNIQUE KEY "UK_5lcv591avfqtjewkqjhjr4nrw" ("tread_num")
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tb_tread
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_tread` VALUES (1, '11.png', 100.00, '1109');
-COMMIT;
-
--- ----------------------------
--- Table structure for tb_tread_info
--- ----------------------------
-DROP TABLE IF EXISTS `tb_tread_info`;
-CREATE TABLE "tb_tread_info" (
-  "id" int(11) NOT NULL AUTO_INCREMENT,
-  "color" varchar(20) DEFAULT NULL,
-  "count" bigint(20) DEFAULT NULL,
-  "hardness" double DEFAULT NULL,
-  "size" double DEFAULT NULL,
-  "thickness" double DEFAULT NULL,
-  "type" int(11) DEFAULT NULL,
-  PRIMARY KEY ("id")
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tb_tread_info
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_tread_info` VALUES (1, '黑', 100, 0.4, 295, 23, 1);
-COMMIT;
-
--- ----------------------------
--- Table structure for tb_tread_tread_info
--- ----------------------------
-DROP TABLE IF EXISTS `tb_tread_tread_info`;
-CREATE TABLE "tb_tread_tread_info" (
-  "tread_id" int(11) NOT NULL,
-  "tread_info_id" int(11) NOT NULL,
-  UNIQUE KEY "UK_9hvgi5xyyei9tg3xrbdxp8ws" ("tread_info_id"),
-  KEY "FK87u5wqkm7sve6iwjqprmxh6fd" ("tread_id"),
-  CONSTRAINT "FK87u5wqkm7sve6iwjqprmxh6fd" FOREIGN KEY ("tread_id") REFERENCES "tb_tread" ("id"),
-  CONSTRAINT "FKor0wxvvwa6xjd3p9j2udtuo8x" FOREIGN KEY ("tread_info_id") REFERENCES "tb_tread_info" ("id")
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tb_tread_tread_info
--- ----------------------------
-BEGIN;
-INSERT INTO `tb_tread_tread_info` VALUES (1, 1);
-COMMIT;
-
 -- ----------------------------
 -- Table structure for tb_user
 -- ----------------------------
