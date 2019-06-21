@@ -68,7 +68,7 @@ saitama | 135790 | 管理员权限
 ## 鸣谢：
 [该项目参考了vue-element-admin](https://panjiachen.github.io/vue-element-admin-site/zh/)
 
-### 赞助下秃头青年去值个发吧
+### 赞助下秃头青年去植个发吧
 <p align="center">
 <img src="http://47.105.230.85:9090/wxfkm/mgg.png" alt="Sample"  width="250">	
 </p>
