@@ -33,7 +33,6 @@ public class IpAddressUtil {
             String resp = HttpClientUtil.doGet(apiUrl, map);
             JSONObject jsonObject = JSON.parseObject(resp);
             JSONObject result = jsonObject.getJSONObject("result");
-
             JSONObject data = result.getJSONObject("data");
             String city = data.getString("address_city");
             String region = data.getString("address_province");

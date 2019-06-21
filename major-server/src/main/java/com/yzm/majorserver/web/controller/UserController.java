@@ -79,10 +79,7 @@ public class UserController {
     @PostMapping("/update")
     @PreAuthorize("hasPermission('sysUser','update')")
     @LogAnnotation(moduleName = MODULE_NAME, methodName = "修改用户")
-    public ResultVO update(@Validated @RequestBody UserDO userDO, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResultVO.error(ErrorMessageUtil.getErrorMsg(result.getAllErrors()));
-        }
+    public ResultVO update( @RequestBody UserDO userDO) {
         Integer update = userService.update(userDO);
         if (update != 0) {
             return ResultVO.success();

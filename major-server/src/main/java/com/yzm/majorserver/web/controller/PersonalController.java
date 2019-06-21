@@ -41,17 +41,14 @@ public class PersonalController {
 
     @PostMapping("/updateInfo")
     @LogAnnotation(moduleName = MODULE_NAME, methodName = "修改个人信息")
-    public ResultVO updateInfo(@Validated @RequestBody UserDO userDO, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResultVO.error(ErrorMessageUtil.getErrorMsg(result.getAllErrors()));
-        }
+    public ResultVO updateInfo(@RequestBody UserDO userDO) {
         personalService.updateInfo(userDO);
         return ResultVO.success();
     }
 
     @PostMapping("/updatePassword")
     @LogAnnotation(moduleName = MODULE_NAME, methodName = "修改个人密码")
-    public ResultVO updatePassword(@Validated @RequestBody UpdatePassword password,BindingResult result) {
+    public ResultVO updatePassword(@Validated @RequestBody UpdatePassword password, BindingResult result) {
         if (result.hasErrors()) {
             return ResultVO.error(ErrorMessageUtil.getErrorMsg(result.getAllErrors()));
         }
@@ -60,7 +57,7 @@ public class PersonalController {
     }
 
     @PostMapping("/updateImg")
-    @LogAnnotation(moduleName = MODULE_NAME,methodName = "修改头像")
+    @LogAnnotation(moduleName = MODULE_NAME, methodName = "修改头像")
     public ResultVO updateImg(@RequestBody UserDTO userDTO) {
         personalService.updateImg(userDTO);
         return ResultVO.success();
