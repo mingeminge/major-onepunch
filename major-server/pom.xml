@@ -79,10 +79,10 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.10</version>
         </dependency>
-        <dependency>    <!-- http client version is 4.5.3 -->
+        <dependency>    <!-- http client version is 4.5.13 -->
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <version>4.5.13</version>
         </dependency>
     </dependencies>
 
